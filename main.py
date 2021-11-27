@@ -209,16 +209,11 @@ def contact():
 def send_email(name, email, phone, message):
     with app.app_context():
         email_message = f"Name: {name}\nEmail: {email}\nPhone: {phone}\nMessage: {message}"
-        msg = Message(subject="You've just got a new message from your Portfolio website.",
+        msg = Message(subject="You've just got a new message from your Blog website.",
                       sender=app.config.get("MAIL_USERNAME"),
-                      recipients=["<goldenboy70777@gmail.com>"],  # replace with your email for testing
+                      recipients=["<goldenboy70777@gmail.com>"],
                       body=email_message)
-        # msg.add_recipient("abduvalizokhidov@gmail.com")
         mail.send(msg)
-#
-# @app.route("/contact")
-# def contact():
-#     return render_template("contact.html", current_user=current_user)
 
 
 @app.route("/new-post", methods=["GET", "POST"])
