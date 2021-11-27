@@ -1,6 +1,7 @@
 from flask import Flask, render_template, redirect, url_for, flash, abort, request
 from flask_bootstrap import Bootstrap
 from flask_ckeditor import CKEditor
+from flask_mail import Mail, Message
 from datetime import date
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_sqlalchemy import SQLAlchemy
@@ -27,6 +28,18 @@ Bootstrap(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL",   "sqlite:///blog.db")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
+
+## Setup mail
+mail_settings = {
+    "MAIL_SERVER": 'smtp.gmail.com',
+    "MAIL_PORT": 465,
+    "MAIL_USE_TLS": False,
+    "MAIL_USE_SSL": True,
+    "MAIL_USERNAME": os.getenv('EMAIL_USER'),
+    "MAIL_PASSWORD": os.getenv('EMAIL_PASSWORD')
+}
+app.config.update(mail_settings)
+mail = Mail(app)
 
 ## Login manager
 login_manager = LoginManager()
@@ -194,11 +207,14 @@ def contact():
 
 
 def send_email(name, email, phone, message):
-    email_message = f"Subject:You've just got a new message from your Portfolio website.\n\nName: {name}\nEmail: {email}\nPhone: {phone}\nMessage: {message}"
-    with smtplib.SMTP("smtp.gmail.com", port=587) as connection:
-        connection.starttls()
-        connection.login(my_email, password)
-        connection.sendmail(my_email, my_email, email_message)
+    with app.app_context():
+        email_message = f"Name: {name}\nEmail: {email}\nPhone: {phone}\nMessage: {message}"
+        msg = Message(subject="You've just got a new message from your Portfolio website.",
+                      sender=app.config.get("MAIL_USERNAME"),
+                      recipients=["<goldenboy70777@gmail.com>"],  # replace with your email for testing
+                      body=email_message)
+        # msg.add_recipient("abduvalizokhidov@gmail.com")
+        mail.send(msg)
 #
 # @app.route("/contact")
 # def contact():
