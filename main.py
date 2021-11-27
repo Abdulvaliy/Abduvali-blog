@@ -35,8 +35,8 @@ mail_settings = {
     "MAIL_PORT": 465,
     "MAIL_USE_TLS": False,
     "MAIL_USE_SSL": True,
-    "MAIL_USERNAME": os.getenv('EMAIL_USER'),
-    "MAIL_PASSWORD": os.getenv('EMAIL_PASSWORD')
+    "MAIL_USERNAME": os.getenv('EMAIL'),
+    "MAIL_PASSWORD": os.getenv('PASSWORD')
 }
 app.config.update(mail_settings)
 mail = Mail(app)
