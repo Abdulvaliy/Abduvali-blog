@@ -483,3 +483,7 @@ footer .copyright {
   font-size: 16px;
   padding: 25px 35px;
 }
+
+body > article > div > div > div > p > img {
+  width: 100% !important;
+}
